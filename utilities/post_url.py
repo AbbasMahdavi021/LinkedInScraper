@@ -14,7 +14,7 @@ is_valid_linkedin_post():
 
 import re
 
-def get_post_url():
+def request_post_url():
 
     # Loop until a valid LinkedIn post URL is entered
     while True:

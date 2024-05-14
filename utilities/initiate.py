@@ -14,5 +14,5 @@ def initiate(driver):
             else:
                 print("Couldn't log in. Retrying...")
         else:
-            print("Failed to get LinkedIn credentials. Skipping login process.")
+            print("Proceeding without LinkedIn credentials.")
             return False

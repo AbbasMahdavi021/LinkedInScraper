@@ -21,8 +21,9 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 
 
-from utilities.post_url import get_post_url
-from utilities.get_comments import get_comments
+from utilities.post_url import request_post_url
+from utilities.comments.get_comments import get_public_comments, get_all_comments
+
 
 from utilities.initiate import initiate
 
@@ -42,12 +43,12 @@ def main():
 
     is_authenticated = initiate(driver)
 
-    target_post_url = get_post_url()
+    target_post_url = request_post_url()
 
     if is_authenticated:
-        get_all_comments(target_post_url)
+        get_all_comments(driver, target_post_url)
     else:
-        get_public_comments(target_post_url)
+        get_public_comments(driver, target_post_url)
 
 
 
