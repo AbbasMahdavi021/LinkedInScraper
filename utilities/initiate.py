@@ -1,5 +1,5 @@
-from .linkedin_login import linkedin_login
-from .get_linkedin_credentials import get_linkedin_credentials
+from .auth.linkedin_login import linkedin_login
+from .auth.get_linkedin_credentials import get_linkedin_credentials
 
 def initiate(driver):
 

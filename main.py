@@ -47,12 +47,10 @@ def main():
 
     if is_authenticated:
         get_all_comments(driver, target_post_url)
+        driver.quit()
     else:
         get_public_comments(driver, target_post_url)
-
-
-
-
+        driver.quit()
 
 
 if __name__ == '__main__':
