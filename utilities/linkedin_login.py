@@ -1,6 +1,9 @@
+import time
+
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import NoSuchElementException
 
 def linkedin_login(driver, linkedin_credentials):
     """
@@ -37,8 +40,29 @@ def linkedin_login(driver, linkedin_credentials):
         sign_in_button = driver.find_element(By.XPATH, "//button[contains(@class, 'from__button--floating')]")
         sign_in_button.click()
 
+        time.sleep(1)
+        # Check for errors related to username and password
+        try:
+            error_username = driver.find_element(By.ID, "error-for-username")
+            if error_username.is_displayed():
+                print("Error:", error_username.text)
+        except NoSuchElementException:
+            pass  # No error message for username
+
+        try:
+            error_password = driver.find_element(By.ID, "error-for-password")
+            if error_password.is_displayed():
+                print("Erro:", error_password.text)
+        except NoSuchElementException:
+            pass  # No error message for password
+
+        # Wait until redirected to the feed page (or any other desired page)
+        WebDriverWait(driver, 5).until(
+            EC.url_contains("/feed")
+        )
+
         # Check if login was successful by waiting for the dashboard element
-        WebDriverWait(driver, 10).until(
+        WebDriverWait(driver, 5).until(
             EC.visibility_of_element_located((By.CLASS_NAME, "feed-identity-module"))
         )
         
@@ -46,5 +70,4 @@ def linkedin_login(driver, linkedin_credentials):
         return True
 
     except Exception as e:
-        print(f"Error during login: {e}")
         return False

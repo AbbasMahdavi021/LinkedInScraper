@@ -19,11 +19,13 @@ def initiate():
         if linkedin_credentials:
             is_logged_in = linkedin_login(driver, linkedin_credentials)
             if is_logged_in:
-                print("Login successful. Proceeding with the scraping process.")
+                print("Login successful. Now we can retrive more data!")
                 break
             else:
                 print("Couldn't log in. Retrying...")
         else:
             print("Failed to get LinkedIn credentials. Skipping login process.")
             break
+    
+
     
