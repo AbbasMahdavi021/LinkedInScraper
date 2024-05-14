@@ -3,7 +3,7 @@ import re
 import pandas as pd
 from bs4 import BeautifulSoup as BSoup
 
-from save_comments_to_csv import save_comments_to_csv
+from utilities.save_comments_to_csv import save_comments_to_csv
 
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
