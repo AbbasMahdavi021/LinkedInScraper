@@ -18,8 +18,12 @@ Date: 05/14/24
 from utilities.is_valid_linkedin_post import is_valid_linkedin_post
 from utilities.get_comments import get_comments
 
+from utilities.initiate import initiate
+
 
 def main():
+
+    initiate()
     # Loop until a valid LinkedIn post URL is entered
     while True:
         postURL = input("Enter a valid LinkedIn Post URL: ")
