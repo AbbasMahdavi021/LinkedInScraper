@@ -1,4 +1,6 @@
 *.pyc
 *.pyo
 
+comments_output.csv
+
 __pycache__/
