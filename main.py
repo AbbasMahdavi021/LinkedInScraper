@@ -15,32 +15,44 @@ Author: Abbas Mahdavi
 Date: 05/14/24
 
 """
-from utilities.is_valid_linkedin_post import is_valid_linkedin_post
+
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.chrome.options import Options
+
+
+from utilities.post_url import get_post_url
 from utilities.get_comments import get_comments
 
 from utilities.initiate import initiate
 
 
+path_to_driver = './drivers/chromedriver.exe'
+
+
 def main():
 
-    initiate()
-    # Loop until a valid LinkedIn post URL is entered
-    while True:
-        postURL = input("Enter a valid LinkedIn Post URL: ")
+    options = Options()
+    # Keeps the browser open after the script ends
+    options.add_experimental_option("detach", True)  
 
-        # Check if the entered URL is a valid LinkedIn post
-        # return True or False
-        # URL must start with: https://www.linkedin.com/feed/... 
-        #                   or https://www.linkedin.com/post/...
+    service = Service(executable_path=path_to_driver)
+    driver = webdriver.Chrome(service=service, options=options)
+    driver.minimize_window()
+
+    is_authenticated = initiate(driver)
+
+    target_post_url = get_post_url()
+
+    if is_authenticated:
+        get_all_comments(target_post_url)
+    else:
+        get_public_comments(target_post_url)
 
 
-        if is_valid_linkedin_post(postURL):
-            break
-        else:
-            print("Error: Invalid LinkedIn Post URL!")
 
-    # Once a valid URL is entered, get comments for the post
-    get_comments(postURL)
+
+
 
 if __name__ == '__main__':
     main()

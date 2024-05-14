@@ -12,10 +12,27 @@ is_valid_linkedin_post():
 
 """
 
-
 import re
 
-def is_valid_linkedin_post(postURL):
+def get_post_url():
+
+    # Loop until a valid LinkedIn post URL is entered
+    while True:
+        post_url = input("Enter a valid LinkedIn Post URL: ")
+
+        # Check if the entered URL is a valid LinkedIn post
+        # return True or False
+        # URL must start with: https://www.linkedin.com/feed/... 
+        #                   or https://www.linkedin.com/post/...
+
+        if is_valid_linkedin_url(post_url):
+            return post_url
+        else:
+            print("Error: Invalid LinkedIn Post URL!")
+            print(f"URL must start with:\nhttps://www.linkedin.com/feed/...\nor\nhttps://www.linkedin.com/post/...")
+
+
+def is_valid_linkedin_url(postURL):
 
     # Define a regular expression pattern for LinkedIn post URLs
     # URL must start with: https://www.linkedin.com/feed/... 
