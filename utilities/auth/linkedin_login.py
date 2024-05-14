@@ -18,9 +18,18 @@ def linkedin_login(driver, linkedin_credentials):
     """
     username, password = linkedin_credentials
 
+    error = ''
+
     try:
         # Open LinkedIn login page
         driver.get("https://www.linkedin.com/login")
+
+        time.sleep(2)
+
+        #if already logged in and feedpage is accessed
+        curr_url = driver.current_url
+        if curr_url == 'https://www.linkedin.com/feed/':
+            return True
 
         # Wait for the username field to be visible
         username_field = WebDriverWait(driver, 10).until(
@@ -40,21 +49,27 @@ def linkedin_login(driver, linkedin_credentials):
         sign_in_button = driver.find_element(By.XPATH, "//button[contains(@class, 'from__button--floating')]")
         sign_in_button.click()
 
-        time.sleep(1)
+        time.sleep(2)
+
         # Check for errors related to username and password
         try:
+
+            # Check if the "challenge" element exists
+            time.sleep(3)
+            url = driver.current_url
+            if "checkpoint" in url:
+                error = "LinkedIn Challenge Verification Needed!"
+                driver.maximize_window()  # Maximize the window for human verification
             error_username = driver.find_element(By.ID, "error-for-username")
             if error_username.is_displayed():
-                print("Error:", error_username.text)
-        except NoSuchElementException:
-            pass  # No error message for username
+                error = error_username.text
 
-        try:
             error_password = driver.find_element(By.ID, "error-for-password")
             if error_password.is_displayed():
-                print("Erro:", error_password.text)
+                error = error_password.text
+
         except NoSuchElementException:
-            pass  # No error message for password
+            pass  # No error message for username
 
         # Wait until redirected to the feed page (or any other desired page)
         WebDriverWait(driver, 5).until(
@@ -66,8 +81,11 @@ def linkedin_login(driver, linkedin_credentials):
             EC.visibility_of_element_located((By.CLASS_NAME, "feed-identity-module"))
         )
         
-        print("Login successful.")
+        print("Logged Into LinkedIn via Credentials")
+        driver.minimize_window()
         return True
 
-    except Exception as e:
+    except Exception:
+        print (error)
+        driver.minimize_window()
         return False
