@@ -149,7 +149,6 @@ def credentials_error(driver):
         if error_password.is_displayed():
             return error_password.text
     except NoSuchElementException:
-        print("No credential errors!")
         return False
     
     return False
