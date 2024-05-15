@@ -1,19 +1,44 @@
+"""
+LinkedIn Login and Credentials Error Handling
+
+Author: Abbas Mahdavi
+Date: 05/14/24
+
+Description:
+This script contains functions for logging into LinkedIn using provided credentials and handling login-related errors using Selenium. It also includes a function to check for credential errors during the login process.
+
+Functions:
+- linkedin_login(driver, linkedin_credentials): Logs into LinkedIn using provided credentials.
+    - Returns:
+        - True if login is successful.
+        - False if login fails or encounters errors.
+
+- credentials_error(driver): Checks for credential-related errors during the LinkedIn login process.
+    - Returns:
+        - Error message if credential errors are detected.
+        - False if no credential errors are found.
+
+"""
+
 import time
-from selenium.common.exceptions import TimeoutException, NoSuchElementException, ElementNotVisibleException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException, NoSuchElementException
 
 def linkedin_login(driver, linkedin_credentials):
+    
     """
-    Logs into LinkedIn using provided credentials.
+    This function handles the LinkedIn login process, including entering credentials,
+    handling challenges, and verifying successful login.
 
     Parameters:
     - driver: Selenium WebDriver instance.
     - linkedin_credentials: Tuple containing (username, password).
 
     Returns:
-    - bool: True if login is successful, False otherwise.
+    - True if login is successful.
+    - False or Error string if login fails or encounters errors.
     """
     username, password = linkedin_credentials
     try:
@@ -58,8 +83,8 @@ def linkedin_login(driver, linkedin_credentials):
                     print("Please Complete Verification, Re-Checking in 30 seconds!")
                     time.sleep(2)
                     driver.maximize_window()  # Maximize the window for human verification
-                    # Wait until redirected to the feed page
-            
+
+                # Wait until redirected to the feed page
                 WebDriverWait(driver, 10).until(EC.url_contains("/feed"))
 
                 driver.minimize_window()
@@ -72,11 +97,11 @@ def linkedin_login(driver, linkedin_credentials):
                     return False
                 else:
                     return res
-            
+
             res = credentials_error(driver)
 
             if res == False:
-                "No Credential Errors!"
+                print("No Credential Errors!")
             else:
                 return res
 
@@ -107,8 +132,14 @@ def linkedin_login(driver, linkedin_credentials):
         return False
     
 
-
 def credentials_error(driver):
+    """
+    Checks for credential-related errors during the LinkedIn login process.
+
+    Returns:
+    - Error message if credential errors are detected.
+    - False if no credential errors are found.
+    """
     try:
         # Check for errors related to username and password
         error_username = driver.find_element(By.ID, "error-for-username")
@@ -122,4 +153,3 @@ def credentials_error(driver):
         return False
     
     return False
-    

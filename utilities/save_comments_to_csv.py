@@ -1,3 +1,17 @@
+"""
+CSV Comments Saving
+
+Author: Abbas Mahdavi
+Date: 05/14/24
+Description:
+This function takes a list of dictionaries containing comment data and saves it to a CSV file.
+
+Usage:
+1. Use the 'save_comments_to_csv' function to save comments to a CSV file.
+2. Provide the comments list and an optional output filename.
+
+"""
+
 import csv
 
 def save_comments_to_csv(comments_list, output_filename="comments.csv"):

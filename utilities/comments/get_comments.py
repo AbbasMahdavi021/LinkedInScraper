@@ -1,3 +1,20 @@
+"""
+LinkedIn Comments Scraping
+
+Author: Abbas Mahdavi
+Date: 05/14/24
+Description:
+This script contains functions to scrape comments from LinkedIn posts using Selenium and BeautifulSoup. 
+It includes functions to scrape all comments (including hidden ones) and public comments only. 
+The scraped comments are then saved to a CSV file.
+
+Usage:
+1. Use 'get_all_comments' to scrape all comments from a LinkedIn post.
+2. Use 'get_public_comments' to scrape public comments only, without authentication.
+
+"""
+
+
 import time
 from bs4 import BeautifulSoup as BSoup
 from selenium.webdriver.common.by import By
@@ -5,6 +22,7 @@ from selenium.webdriver.common.by import By
 from ..save_comments_to_csv import save_comments_to_csv
 
 comments_list = []
+
 
 def get_all_comments(driver, target_post_url):
     driver.get(target_post_url)
@@ -55,6 +73,8 @@ def get_all_comments(driver, target_post_url):
             "----------------------------------")
     
     save_comments_to_csv(comments_list, "comments.csv")
+
+
 
 def get_public_comments(driver, target_post_url):
     driver.get(target_post_url)
