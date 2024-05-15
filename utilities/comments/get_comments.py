@@ -16,8 +16,8 @@ def get_all_comments(driver, target_post_url):
             show_more_button = driver.find_element(By.CLASS_NAME, "comments-comments-list__load-more-comments-button")
             show_more_button.click()
             return True
-        except Exception as e:
-            print(f"Error clicking 'Show more' button: {e}")
+        except Exception:
+            print("Found all comments!")
             return False
         
     while True:
@@ -34,13 +34,25 @@ def get_all_comments(driver, target_post_url):
         position = comment.find(class_="comments-post-meta__headline").get_text(strip=True)
         comment_text = comment.find(class_="comments-comment-item__main-content").get_text(strip=True)
         Timestamp = comment.find(class_="comments-comment-item__timestamp").get_text(strip=True)
-        comments_list.append({
+
+        comment_dict = {
             "Name": author_name,
             "LinkedIn URL": linkedin_url,
             "Position": position,
             "Comment": comment_text,
             "Timestamp": Timestamp
-        })
+        }
+        
+        comments_list.append(comment_dict)
+    
+        # Print the comment in a nice format
+        print(f"Scraped Comment:\n"
+            f"Name: {comment_dict['Name']}\n"
+            f"LinkedIn URL: {comment_dict['LinkedIn URL']}\n"
+            f"Position: {comment_dict['Position']}\n"
+            f"Comment: {comment_dict['Comment']}\n"
+            f"Timestamp: {comment_dict['Timestamp']} ago\n"
+            "----------------------------------")
     
     save_comments_to_csv(comments_list, "comments.csv")
 
@@ -51,27 +63,37 @@ def get_public_comments(driver, target_post_url):
     comment_sections_public = soup.find_all(class_="comment")
     
     for section in comment_sections_public:
-        comment_data = {}
+        comment_dict = {}
         try:
             author_element = section.find(class_="comment__author")
             if author_element:
-                comment_data["Name"] = author_element.text.strip()
-                comment_data["LinkedIn URL"] = author_element["href"]
+                comment_dict["Name"] = author_element.text.strip()
+                comment_dict["LinkedIn URL"] = author_element["href"]
             
             position_element = section.find(class_="comment__author-headline")
             if position_element:
-                comment_data["Position"] = position_element.text.strip()
+                comment_dict["Position"] = position_element.text.strip()
             
             comment_text_element = section.find(class_="comment__text")
             if comment_text_element:
-                comment_data["Comment"] = comment_text_element.text.strip()
+                comment_dict["Comment"] = comment_text_element.text.strip()
             
             timestamp_element = section.find(class_="comment__duration-since")
             if timestamp_element:
-                comment_data["Timestamp"] = timestamp_element.text.strip()
+                comment_dict["Timestamp"] = timestamp_element.text.strip()
 
-            comments_list.append(comment_data)
-        except Exception as e:
-            print(f"Error processing comment section: {e}")
+            comments_list.append(comment_dict)
+
+            # Print the comment in the specified format
+            print(f"Scraped Comment:\n"
+                f"Name: {comment_dict.get('Name', 'N/A')}\n"
+                f"LinkedIn URL: {comment_dict.get('LinkedIn URL', 'N/A')}\n"
+                f"Position: {comment_dict.get('Position', 'N/A')}\n"
+                f"Comment: {comment_dict.get('Comment', 'N/A')}\n"
+                f"Timestamp: {comment_dict.get('Timestamp', 'N/A')} ago\n"
+                "----------------------------------")
+            
+        except Exception:
+            print(f"Error processing comment section!")
 
     save_comments_to_csv(comments_list, "comments.csv")

@@ -10,4 +10,4 @@ def save_comments_to_csv(comments_list, output_filename="comments.csv"):
         writer.writeheader()
         writer.writerows(comments_list)
 
-    print(f"Comments saved to {output_filename}")
+    print(f"Comments saved to ./{output_filename}")
